@@ -1,0 +1,15 @@
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_URL:kafka:9092}
+    consumer:
+      group-id: needLoanEvent-loanOffer-consumer-group
+      auto-offset-reset: earliest
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: metrics,prometheus,info,health
+
+server:
+  port: 8085
