@@ -9,7 +9,7 @@ spring:
   kafka:
     bootstrap-servers: ${KAFKA_URL:kafka:9092}
     consumer:
-      group-id: needLoanEvent-loanOffer-consumer-group
+      group-id: needLoanEvent-loanFulfilment-consumer-group
       auto-offset-reset: earliest
       properties:
         interceptor:
