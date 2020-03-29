@@ -1,9 +1,23 @@
+application:
+  name: loan-fulfilment-service
+
+tracer:
+  host: ${TRACER_HOST:localhost}
+  port: ${TRACER_PORT:6831}
+
 spring:
   kafka:
     bootstrap-servers: ${KAFKA_URL:kafka:9092}
     consumer:
       group-id: needLoanEvent-loanOffer-consumer-group
       auto-offset-reset: earliest
+      properties:
+        interceptor:
+          classes: io.opentracing.contrib.kafka.TracingConsumerInterceptor
+    producer:
+      properties:
+        interceptor:
+          classes: io.opentracing.contrib.kafka.TracingProducerInterceptor
 
 management:
   endpoints:
