@@ -1,4 +1,0 @@
-language: kotlin
-sudo: false
-
-script: "./gradlew clean build"
