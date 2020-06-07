@@ -8,16 +8,61 @@ tracer:
 spring:
   kafka:
     bootstrap-servers: ${KAFKA_URL:kafka:9092}
-    consumer:
-      group-id: needLoanEvent-loanFulfilment-consumer-group
-      auto-offset-reset: earliest
-      properties:
-        interceptor:
-          classes: io.opentracing.contrib.kafka.TracingConsumerInterceptor
     producer:
       properties:
         interceptor:
           classes: io.opentracing.contrib.kafka.TracingProducerInterceptor
+
+  data:
+    mongodb:
+      uri: ${MONGO_URL:mongodb://localhost:27017/loan-fulfilment-service}
+
+loan-fulfilment-service:
+  mongo:
+    database-name: loan-fulfilment-service
+    collection-name: LoanApplication
+  kafka:
+    loan-application-event:
+      topic: loanApplicationEvent
+      producer:
+        client-id: loanApplicationProducer
+        properties:
+          interceptor:
+            classes: io.opentracing.contrib.kafka.TracingProducerInterceptor
+      consumer:
+        client-id: loanApplicationEventConsumer
+        group-id: loanApplicationEvent-loanFulfilment-consumer-group
+        auto-offset-reset: latest
+        properties:
+          interceptor:
+            classes: io.opentracing.contrib.kafka.TracingConsumerInterceptor
+    need-loan-event:
+      topic: needLoanEvent
+      consumer:
+        client-id: needLoanEventConsumer
+        group-id: needLoanEvent-loanFulfilment-consumer-group
+        auto-offset-reset: latest
+        properties:
+          interceptor:
+            classes: io.opentracing.contrib.kafka.TracingConsumerInterceptor
+    loan-offer-event:
+      topic: loanOfferDataAvailableForLoanProcessing
+      consumer:
+        client-id: loanOfferEventConsumer
+        group-id: loanOfferEvent-loanFulfilment-consumer-group
+        auto-offset-reset: latest
+        properties:
+          interceptor:
+            classes: io.opentracing.contrib.kafka.TracingConsumerInterceptor
+    screening-result-event:
+      topic: screeningDataAvailableForLoanProcessing
+      consumer:
+        client-id: screeningEventConsumer
+        group-id: screeningEvent-loanFulfilment-consumer-group
+        auto-offset-reset: latest
+        properties:
+          interceptor:
+            classes: io.opentracing.contrib.kafka.TracingConsumerInterceptor
 
 management:
   endpoints:
@@ -27,3 +72,4 @@ management:
 
 server:
   port: 8085
+
